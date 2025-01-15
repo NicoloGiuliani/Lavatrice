@@ -2,16 +2,25 @@ import java.util.Scanner;
 
 public class Lavatrice {
     private Scanner sc = new Scanner(System.in); 
-    private boolean sportelloChiuso = true;
-    private Stato stato = Stato.spenta;
-    private boolean detersivoPresente = false;
-    private boolean temperaturaImpostata=false;
-    private boolean lavaggioEseguito = false;
-    private boolean lavaggioTerminato = false;
+    
+    //dichiarazione degli attributi della classe Lavatrice
+    private boolean sportelloChiuso;
+    private Stato stato;
+    private boolean detersivoPresente;
+    private boolean temperaturaImpostata;
+    private boolean lavaggioEseguito;
+    private boolean lavaggioTerminato;
     private int temperatura;
 
-    public Stato getStato() {
-        return stato;
+    //dichiarazione costruttore della classe Lavatrice (assegnazione iniziale dei valori)
+    public Lavatrice() {
+        sportelloChiuso = true;
+        stato = Stato.spenta;
+        detersivoPresente = false;
+        temperaturaImpostata = false;
+        lavaggioEseguito = false;
+        lavaggioTerminato = false;
+        temperatura = 0;
     }
 
     public void accendi() {
@@ -64,28 +73,28 @@ public class Lavatrice {
             System.out.println("Accendi la lavatrice prima di impostare la temperatura.\n");
             return;
         }
-
-        System.out.println("Inserisci la temperatura (tra 20 e 90 gradi): ");
-        int nuovaTemperatura = sc.nextInt();
-
-        if (nuovaTemperatura <= 20 || nuovaTemperatura >= 90) {
-            System.out.println("Temperatura non valida. Deve essere compresa tra 20 e 90 gradi.\n");
-            return;
-        }
-
-        if (temperaturaImpostata && nuovaTemperatura == temperatura) {
-            System.out.println("La temperatura inserita è già impostata.\n");
-            return;
-        }
-
-        if (stato == Stato.lavaggioInCorso) {
+        else if (stato == Stato.lavaggioInCorso) {
             System.out.println("Non puoi cambiare la temperatura durante il lavaggio.\n");
             return;
         }
+        else {
+            System.out.println("Inserisci la temperatura (tra 20 e 90 gradi): ");
+            int nuovaTemperatura = sc.nextInt();
 
-        temperatura = nuovaTemperatura;
-        temperaturaImpostata = true;
-        System.out.println("Temperatura impostata a " + temperatura + " gradi.\n");
+            if (nuovaTemperatura <= 20 || nuovaTemperatura >= 90) {
+                System.out.println("Temperatura non valida. Deve essere compresa tra 20 e 90 gradi.\n");
+                return;
+            }
+
+            if (temperaturaImpostata && nuovaTemperatura == temperatura) {
+                System.out.println("La temperatura inserita è già impostata.\n");
+                return;
+            }
+
+            temperatura = nuovaTemperatura;
+            temperaturaImpostata = true;
+            System.out.println("Temperatura impostata a " + temperatura + " gradi.\n");
+        }
     }
 
     public void avviaLavaggio() {
@@ -93,7 +102,6 @@ public class Lavatrice {
             System.out.println("Il lavaggio è già stato eseguito. Riavvia la lavatrice per eseguire un nuovo lavaggio.\n");
             return;
         }
-
         if (stato == Stato.standBy && sportelloChiuso && detersivoPresente && temperatura >= 20 && temperatura <= 90) {
             stato = Stato.lavaggioInCorso;
             lavaggioEseguito = true;
@@ -105,7 +113,8 @@ public class Lavatrice {
                 e.printStackTrace();
             }
 
-        } else {
+        }     
+        else {
             System.out.println("Impossibile avviare il lavaggio. Verifica che lo sportello sia chiuso, il detersivo sia presente e la temperatura sia corretta.\n");
         }
     }
@@ -115,7 +124,7 @@ public class Lavatrice {
             System.out.println("Il lavaggio è già terminato.\n");
             return;
         }
-
+        
         if (stato == Stato.lavaggioInCorso) {
             System.out.println("Lavaggio terminato\n");
             stato = Stato.standBy;
@@ -134,4 +143,43 @@ public class Lavatrice {
             System.out.println("La lavatrice è già spenta\n");
         }
     }
+
+    //GETTERS
+    public Stato getStato() {
+        return stato;
+    }
+
+    public boolean isSportelloChiuso() {
+        return sportelloChiuso;
+    }
+
+    public boolean isDetersivoPresente() {
+        return detersivoPresente;
+    }
+
+    public boolean isTemperaturaImpostata() {
+        return temperaturaImpostata;
+    }
+
+    public boolean isLavaggioEseguito() {
+        return lavaggioEseguito;
+    }
+
+    public boolean isLavaggioTerminato() {
+        return lavaggioTerminato;
+    }
+
+    public int getTemperatura() {
+        return temperatura;
+    }
+
+    @Override
+    public String toString() {
+        return "sportelloChiuso=" + sportelloChiuso + ", stato=" + stato + ", detersivoPresente="
+                + detersivoPresente + ", temperaturaImpostata=" + temperaturaImpostata + ", lavaggioEseguito="
+                + lavaggioEseguito + ", lavaggioTerminato=" + lavaggioTerminato + ", temperatura=" + temperatura;
+    }
 }
+
+
+
